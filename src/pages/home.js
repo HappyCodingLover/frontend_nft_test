@@ -24,9 +24,9 @@ const Home = () => {
     const nameRes = await getCollectionName();
     setTotalSupply(supplyRes.data);
     setCollectionName(nameRes.data);
-    const nftsRes = await getNfts(supplyRes.data, pageNumber);
+    const nftsRes = await getNfts(supplyRes.data, 0);
     if (nftsRes.success) {
-      setNfts(nftsRes);
+      setNfts(nftsRes.data);
       toast.success(nftsRes.msg, { id: toastLoading });
     } else {
       setNfts([]);
@@ -34,13 +34,15 @@ const Home = () => {
     }
     setPageCounts(Math.floor(supplyRes.data / limit) + 1);
     setLoading(false);
-  }, [pageNumber]);
+  }, []);
 
   useEffect(() => {
     init();
   }, [init]);
 
   const paginationHandler = async (event, page) => {
+    event.preventDefault();
+    console.log("clicked");
     setLoading(true);
     setPageNumber(page);
     const toastLoading = toast.loading("Loading NFTs");
